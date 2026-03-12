@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Симулятор открытия смены | Lamoda</title>
+    <meta name="description" content="Интерактивный тренажёр открытия смены в iBox и Express">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== START MENU ===== -->
+<div id="start-menu" class="start-menu">
+    <div class="start-bg"></div>
+    <div class="start-content">
+        <div class="start-logo">
+            <span class="start-emoji">📱</span>
+            <h1>Симулятор<br>открытия смены</h1>
+            <p class="start-sub">Пройди все шаги как на настоящем рабочем телефоне</p>
+        </div>
+        <div class="start-btns">
+            <button id="btn-start-timer" class="sbtn sbtn-timer"><span>⏱</span> Начать с таймером</button>
+            <button id="btn-start-free" class="sbtn sbtn-free"><span>🚀</span> Свободный режим</button>
+            <button id="btn-leaderboard" class="sbtn sbtn-lb"><span>🏆</span> Мои рекорды</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== LEADERBOARD ===== -->
+<div id="leaderboard-overlay" class="overlay-full hidden">
+    <div class="lb-card">
+        <button id="lb-close" class="lb-close-btn">&times;</button>
+        <h2>🏆 Мои рекорды</h2>
+        <div id="lb-list" class="lb-list"></div>
+        <button id="lb-clear" class="lb-clear-btn">Очистить историю</button>
+    </div>
+</div>
+
+<!-- ===== GAME AREA ===== -->
+<div id="game-area" class="game-area hidden">
+
+    <!-- Timer -->
+    <div id="timer-display" class="timer-box hidden">
+        <div class="timer-pill">
+            <span>⏱</span>
+            <span id="timer-value">00:00.0</span>
+        </div>
+        <div id="penalty-flash" class="penalty hidden">+1 сек</div>
+    </div>
+
+    <!-- 3D Model viewer (for reader screen) -->
+    <div id="model-container" class="model-container hidden">
+        <div class="model-card">
+            <h3>🔍 Найдите номер ридера</h3>
+            <p>Покрутите модель, чтобы увидеть серийный номер на устройстве</p>
+            <model-viewer
+                id="reader-model"
+                camera-controls
+                touch-action="pan-y"
+                auto-rotate
+                shadow-intensity="1"
+                exposure="1.2"
+                camera-orbit="45deg 55deg 2m"
+                min-camera-orbit="auto auto 0.1m"
+                max-camera-orbit="auto auto 8m"
+                style="width:100%;height:300px;border-radius:12px;background:#1e1e3a;"
+                alt="3D модель ридера"
+            ></model-viewer>
+        </div>
+    </div>
+
+    <!-- Phone -->
+    <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen" id="phone-screen">
+
+<!-- ========== S1: DESKTOP ========== -->
+<div class="scr active" id="s1">
+    <div class="statusbar"><span>12:59 ◷</span><span>📶 82% 🔋</span></div>
+    <div class="desktop">
+        <div class="dt-lamoda">lamoda</div>
+        <div class="dt-imei">IMEI: 351832197028880</div>
+        <div class="dt-grid">
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon" style="background:#4CAF50;border-radius:10px;"><span style="font-size:22px;color:#fff;">📞</span></div>
+                <span class="dt-label">Телефон</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon" style="background:#1976D2;border-radius:10px;"><span style="font-size:22px;color:#fff;">💬</span></div>
+                <span class="dt-label">Сообщения</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon" style="background:#2962FF;border-radius:10px;"><span style="font-size:18px;color:#fff;">🚛</span></div>
+                <span class="dt-label">Express</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon"><span style="font-size:28px;">🌐</span></div>
+                <span class="dt-label">Cisco.Anyconnect</span>
+            </div>
+            <div class="dt-app" data-action="open-ibox">
+                <div class="dt-icon dt-ibox-icon">
+                    <div class="mini-ibox"><span class="mi-arc"></span><div class="mi-body">ibox</div></div>
+                </div>
+                <span class="dt-label">Ibox</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon" style="background:#E3F2FD;border-radius:10px;"><span style="font-size:22px;">📦</span></div>
+                <span class="dt-label">AX_d365</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon" style="background:#E3F2FD;border-radius:10px;"><span style="font-size:18px;">🚚</span></div>
+                <span class="dt-label">1C-TRACKER</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon" style="background:#E91E63;border-radius:10px;"><span style="font-size:22px;color:#fff;">📷</span></div>
+                <span class="dt-label">Камера</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon" style="background:#E3F2FD;border-radius:10px;"><span style="font-size:18px;">🚚</span></div>
+                <span class="dt-label">Imview.mobile</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon" style="background:#2AABEE;border-radius:50%;"><span style="font-size:22px;color:#fff;">✈</span></div>
+                <span class="dt-label">Telegram</span>
+            </div>
+        </div>
+        <div class="dt-dock"><span data-wrong style="font-size:24px;cursor:pointer;">⚙️</span></div>
+    </div>
+    <div class="navbar"><span>|||</span><span>○</span><span>◁</span></div>
+</div>
+
+<!-- ========== S1b: DESKTOP (Express) ========== -->
+<div class="scr" id="s1b">
+    <div class="statusbar"><span>12:59 ◷</span><span>📶 82% 🔋</span></div>
+    <div class="desktop">
+        <div class="dt-lamoda">lamoda</div>
+        <div class="dt-imei">IMEI: 351832197028880</div>
+        <div class="dt-grid">
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon" style="background:#4CAF50;border-radius:10px;"><span style="font-size:22px;color:#fff;">📞</span></div>
+                <span class="dt-label">Телефон</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon" style="background:#1976D2;border-radius:10px;"><span style="font-size:22px;color:#fff;">💬</span></div>
+                <span class="dt-label">Сообщения</span>
+            </div>
+            <div class="dt-app" data-action="open-express">
+                <div class="dt-icon" style="background:#2962FF;border-radius:10px;"><span style="font-size:18px;color:#fff;">🚛</span></div>
+                <span class="dt-label">Express</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon"><span style="font-size:28px;">🌐</span></div>
+                <span class="dt-label">Cisco.Anyconnect</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon dt-ibox-icon"><div class="mini-ibox"><span class="mi-arc"></span><div class="mi-body">ibox</div></div></div>
+                <span class="dt-label">Ibox</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon" style="background:#E3F2FD;border-radius:10px;"><span style="font-size:22px;">📦</span></div>
+                <span class="dt-label">AX_d365</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon" style="background:#E3F2FD;border-radius:10px;"><span style="font-size:18px;">🚚</span></div>
+                <span class="dt-label">1C-TRACKER</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon" style="background:#E91E63;border-radius:10px;"><span style="font-size:22px;color:#fff;">📷</span></div>
+                <span class="dt-label">Камера</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon" style="background:#E3F2FD;border-radius:10px;"><span style="font-size:18px;">🚚</span></div>
+                <span class="dt-label">Imview.mobile</span>
+            </div>
+            <div class="dt-app" data-wrong>
+                <div class="dt-icon" style="background:#2AABEE;border-radius:50%;"><span style="font-size:22px;color:#fff;">✈</span></div>
+                <span class="dt-label">Telegram</span>
+            </div>
+        </div>
+        <div class="dt-dock"><span data-wrong style="font-size:24px;cursor:pointer;">⚙️</span></div>
+    </div>
+    <div class="navbar"><span>|||</span><span>○</span><span>◁</span></div>
+</div>
+
+<!-- ========== S2: iBox LOGIN ========== -->
+<div class="scr" id="s2">
+    <div class="ib-login">
+        <div class="ib-logo-wrap">
+            <div class="ib-logo-box">
+                <div class="ib-logo-arc"></div>
+                <div class="ib-logo-rect">ibox</div>
+            </div>
+        </div>
+        <div class="ib-form">
+            <div class="ib-field">
+                <input type="email" id="login-email" placeholder="Email">
+            </div>
+            <div class="ib-field">
+                <input type="password" id="login-password" placeholder="Пароль">
+            </div>
+            <a class="ib-forgot" href="#" onclick="return false">Напомнить пароль</a>
+            <button id="btn-login" class="ib-btn-login">Войти</button>
+        </div>
+        <div class="ib-footer"><a href="#" onclick="return false">Подключить приём карт</a></div>
+    </div>
+</div>
+
+<!-- ========== S3: ALERT ========== -->
+<div class="scr" id="s3">
+    <div class="ib-gray-bg">
+        <div class="ib-topbar">
+            <span class="ib-hamburger" data-wrong>☰</span>
+            <div class="ib-topbar-r"><span data-wrong>🔄</span><span data-wrong>📊</span></div>
+        </div>
+        <div class="ib-alert-center">
+            <div class="ib-alert-box">
+                <div class="ib-alert-mark">!</div>
+                <p>Не удалось подключиться к принтеру</p>
+                <div class="ib-alert-sep"></div>
+                <button class="ib-alert-action" data-action="conn-settings">Настройки соединения</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== S4: PRINTER ========== -->
+<div class="scr" id="s4">
+    <div class="ib-page">
+        <div class="ib-header"><span class="ib-back" data-wrong>‹</span><span class="ib-htitle">Принтер</span></div>
+        <div class="ib-body">
+            <p class="ib-hint">Включите bluetooth и выберите в устройствах принтер Атол 25Ф</p>
+            <div class="ib-row" data-action="printer-off">
+                <span class="ib-row-ico">🖨</span>
+                <span class="ib-row-txt">Принтер отключён</span>
+                <span class="ib-row-r" style="color:#1976D2;">⚡</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== S5: CHOOSE DEVICE ========== -->
+<div class="scr" id="s5">
+    <div class="ib-page">
+        <div class="ib-header"><span class="ib-close" data-wrong>✕</span><span class="ib-htitle">Выберите устройство</span></div>
+        <div class="ib-body ib-list-body">
+            <div class="ib-list-row" data-action="select-usb">USB</div>
+            <div class="ib-list-row" data-wrong>WiFi TCP/IP</div>
+            <div class="ib-list-row" data-wrong>WiFi UDP</div>
+            <div class="ib-list-row" data-wrong>MPOS4052101182</div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== S6: LOADING + PERMISSION ========== -->
+<div class="scr" id="s6">
+    <div class="ib-page">
+        <div class="ib-header"><span class="ib-back" data-wrong>‹</span><span class="ib-htitle">Принтер</span></div>
+        <div class="ib-body">
+            <p class="ib-hint">Включите bluetooth и выберите в устройствах принтер Атол 25Ф</p>
+            <div class="ib-row" style="opacity:.4;">
+                <span class="ib-row-ico">🖨</span>
+                <span class="ib-row-txt">Принтер отключён</span>
+                <span class="ib-row-r" style="color:#1976D2;">⚡</span>
+            </div>
+        </div>
+        <div class="ib-loading-dim">
+            <div class="ib-loading-card">
+                <div class="ib-stopwatch">
+                    <svg width="72" height="72" viewBox="0 0 72 72">
+                        <circle cx="36" cy="38" r="28" fill="none" stroke="#333" stroke-width="2.5"/>
+                        <line x1="36" y1="38" x2="36" y2="16" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="36" y1="38" x2="52" y2="28" stroke="#333" stroke-width="2.5" stroke-linecap="round" class="sw-hand"/>
+                        <circle cx="36" cy="38" r="2.5" fill="#333"/>
+                        <rect x="48" y="8" width="10" height="8" rx="2" fill="#333"/>
+                    </svg>
+                </div>
+                <p>Подождите</p>
+            </div>
+        </div>
+        <div class="ib-perm-bar">
+            <p>Разрешить приложению "iboxPro" доступ к устройству "ATOL USB device"?</p>
+            <div class="ib-perm-btns">
+                <button class="ib-perm-b" data-wrong>Отмена</button>
+                <button class="ib-perm-b ib-perm-ok" data-action="perm-ok">ОК</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== S7: SHIFT CLOSED ========== -->
+<div class="scr" id="s7">
+    <div class="ib-page">
+        <div class="ib-header"><span class="ib-back" data-wrong>‹</span><span class="ib-htitle">Принтер</span></div>
+        <div class="ib-body">
+            <p class="ib-hint">Включите bluetooth и выберите в устройствах принтер Атол 25Ф</p>
+            <div class="printer-block">
+                <span class="pb-ico">🖨</span>
+                <div class="pb-info">
+                    <strong>Принтер подключён</strong>
+                    <span>ATOL USB device</span>
+                    <span>Низкий заряд</span>
+                    <span>Прошивка 5.15.102</span>
+                    <span>Торговля маркированными товарами</span>
+                    <span>Часовая зона: 2</span>
+                </div>
+            </div>
+            <div class="shift-sect">
+                <div class="shift-lbl">ОПЕРАЦИОННАЯ СМЕНА</div>
+                <div class="shift-row">
+                    <span id="shift-txt" class="shift-val">Смена закрыта</span>
+                    <div class="toggle-wrap" id="toggle-wrap">
+                        <div class="toggle-track" id="toggle-track">
+                            <div class="toggle-knob" id="toggle-knob"><span id="toggle-char">O</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ib-btns">
+                <button class="ib-blue" data-wrong>Обмен с ОФД</button>
+                <button class="ib-blue" id="btn-xreport" style="display:none;">Распечатать Х-отчет</button>
+                <button class="ib-blue" data-wrong>Распечатать Y-отчет</button>
+                <button class="ib-blue" data-wrong>Синхронизировать дату и время</button>
+            </div>
+        </div>
+    </div>
+    <div id="receipt-area" class="receipt-area"></div>
+</div>
+
+<!-- ========== S8: SHIFT OPEN ========== -->
+<div class="scr" id="s8">
+    <div class="ib-page">
+        <div class="ib-header"><span class="ib-back" data-action="back-to-main">‹</span><span class="ib-htitle">Принтер</span></div>
+        <div class="ib-body">
+            <p class="ib-hint">Включите bluetooth и выберите в устройствах принтер Атол 25Ф</p>
+            <div class="printer-block">
+                <span class="pb-ico">🖨</span>
+                <div class="pb-info">
+                    <strong>Принтер подключён</strong>
+                    <span>ATOL USB device</span>
+                    <span>Низкий заряд</span>
+                    <span>Прошивка 5.15.102</span>
+                    <span>Торговля маркированными товарами</span>
+                    <span>Часовая зона: 2</span>
+                </div>
+            </div>
+            <div class="shift-sect">
+                <div class="shift-lbl">ОПЕРАЦИОННАЯ СМЕНА</div>
+                <div class="shift-row">
+                    <span class="shift-val shift-green">Смена открыта</span>
+                    <div class="toggle-wrap">
+                        <div class="toggle-track tg-on"><div class="toggle-knob tk-on"><span>✓</span></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="ib-btns">
+                <button class="ib-blue" data-wrong>Обмен с ОФД</button>
+                <button class="ib-blue" data-wrong>Распечатать Х-отчет</button>
+                <button class="ib-blue" data-wrong>Распечатать Y-отчет</button>
+                <button class="ib-blue" data-wrong>Ввод наличных в ККМ для размена</button>
+                <button class="ib-blue" data-wrong>Синхронизировать дату и время</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== S8_5: MAIN SCREEN ========== -->
+<div class="scr" id="s8_5">
+    <div class="ib-page">
+        <div class="ib-topbar">
+            <span class="ib-hamburger" data-action="open-menu">☰</span>
+            <div class="ib-topbar-r"><span data-wrong>🔄</span><span data-wrong>📊</span></div>
+        </div>
+        <div class="ib-notice-area">
+            <p>Экран "Новый платеж" недоступен!!!</p>
+            <p class="n-bold">ТАК И ДОЛЖНО БЫТЬ!</p>
+            <p>Решено еще 9.09.2017.</p>
+            <p class="n-red"><u>Принимать оплату</u> можно,<br>но <b>ТОЛЬКО</b> <i>из Mobile.Express</i></p>
+            <div class="n-logos">
+                <span class="n-ibox-img">ibox</span>
+                <span class="n-la">la</span>
+            </div>
+            <p class="n-small">Если что-то пошло не так,<br>и ты не можешь оплатить заказ —<br>— обратись к своему руководителю</p>
+            <p class="n-small">Не забудь обязательно выдать<br>чек клиенту<br>и взять подпись на накладной!!</p>
+        </div>
+    </div>
+</div>
+
+<!-- ========== S9: SIDE MENU ========== -->
+<div class="scr" id="s9">
+    <div class="side-wrap">
+        <div class="side-panel">
+            <div class="side-user">
+                <p class="su-name">Иванов Иван Иванович, Менеджер</p>
+                <p class="su-email">ivan.ivanov@lamoda.ru</p>
+            </div>
+            <div class="side-items">
+                <div class="si" data-wrong><span class="si-i" style="color:#29B6F6;">⊕</span><span class="si-t" style="color:#29B6F6;">Новый платеж</span></div>
+                <div class="si" data-wrong><span class="si-i">☰</span><span class="si-t">История продаж</span></div>
+                <div class="si si-sep" data-wrong><span class="si-i">🖨</span><span class="si-t">Принтер</span></div>
+                <div class="si" data-wrong><span class="si-i">❓</span><span class="si-t">Поддержка</span></div>
+                <div class="si" data-action="menu-settings"><span class="si-i">⚙</span><span class="si-t">Настройки</span></div>
+                <div class="si" data-wrong><span class="si-i">⇥</span><span class="si-t">Выйти</span></div>
+            </div>
+        </div>
+        <div class="side-dim" data-wrong></div>
+    </div>
+</div>
+
+<!-- ========== S10: SETTINGS ========== -->
+<div class="scr" id="s10">
+    <div class="ib-page">
+        <div class="ib-topbar"><span class="ib-hamburger" data-wrong>☰</span></div>
+        <div class="ib-body">
+            <h2 class="st-title">Настройки</h2>
+            <p class="st-label">Выберите тип ридера</p>
+            <div class="st-reader-row" data-action="select-p17">
+                <span>Chip&PIN NFC (P17)</span>
+                <span class="st-x" id="reader-icon" style="color:#E53935;">✕</span>
+            </div>
+            <div class="st-text-row" data-wrong>com.tap2go.softpos</div>
+            <div class="st-text-row" data-wrong>ТТК</div>
+            <button class="ib-blue" data-wrong>Обновить конфигурацию</button>
+            <p class="st-label" style="margin-top:18px;">История логинов</p>
+            <button class="ib-blue" data-wrong>Очистить историю логинов</button>
+            <p class="st-label" style="margin-top:18px;">Другое</p>
+            <p class="st-id">ID 1102698</p>
+            <button class="ib-blue" data-wrong>Отправить лог</button>
+            <div class="st-text-row" data-wrong>Смена пароля <span style="float:right;color:#29B6F6;">∨</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== S11: SELECT READER ========== -->
+<div class="scr" id="s11">
+    <div class="ib-page">
+        <div class="ib-header"><span class="ib-close" data-wrong>✕</span><span class="ib-htitle">Выберите устройство</span></div>
+        <div class="ib-body ib-list-body" id="reader-list"></div>
+    </div>
+</div>
+
+<!-- ========== S10b: SETTINGS (connected) ========== -->
+<div class="scr" id="s10b">
+    <div class="ib-page">
+        <div class="ib-topbar"><span class="ib-hamburger" data-wrong>☰</span></div>
+        <div class="ib-body">
+            <h2 class="st-title">Настройки</h2>
+            <p class="st-label">Выберите тип ридера</p>
+            <div class="st-reader-row" data-wrong>
+                <span>Chip&PIN NFC (P17)</span>
+                <span class="st-x" style="color:#4CAF50;">✔</span>
+            </div>
+            <div class="st-text-row" data-wrong>com.tap2go.softpos</div>
+            <div class="st-text-row" data-wrong>ТТК</div>
+            <button class="ib-blue" data-wrong>Обновить конфигурацию</button>
+            <p class="st-label" style="margin-top:18px;">История логинов</p>
+            <button class="ib-blue" data-wrong>Очистить историю логинов</button>
+            <p class="st-label" style="margin-top:18px;">Другое</p>
+            <p class="st-id">ID 1102698</p>
+            <button class="ib-blue" data-wrong>Отправить лог</button>
+            <div class="st-text-row" data-wrong>Смена пароля <span style="float:right;color:#29B6F6;">∨</span></div>
+        </div>
+        <div class="ib-bottom"><button class="ib-minimize" data-action="go-home">↩ Свернуть iBox</button></div>
+    </div>
+</div>
+
+<!-- ========== S12: EXPRESS COUNTRY ========== -->
+<div class="scr" id="s12">
+    <div class="ex-center">
+        <p class="ex-choose">Выберите страну</p>
+        <div class="flags">
+            <div class="flag" data-wrong><div class="flag-img"><div class="fl-by"></div></div></div>
+            <div class="flag" data-wrong><div class="flag-img"><div class="fl-kz"></div></div></div>
+            <div class="flag" data-action="select-russia"><div class="flag-img"><div class="fl-ru"></div></div></div>
+        </div>
+        <p class="ex-ver">PUPSME139.1</p>
+    </div>
+    <div class="navbar"><span>|||</span><span>○</span><span>◁</span></div>
+</div>
+
+<!-- ========== S13: EXPRESS PVZ ========== -->
+<div class="scr" id="s13">
+    <div class="ex-page">
+        <div class="ex-logo-bar">
+            <div class="ex-logo-icon">
+                <svg width="26" height="26" viewBox="0 0 26 26"><rect width="26" height="26" rx="4" fill="#3949AB"/><g fill="rgba(255,255,255,.8)"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="15" y="4" width="7" height="7" rx="1"/><rect x="4" y="15" width="7" height="7" rx="1"/><rect x="15" y="15" width="7" height="7" rx="1"/></g></svg>
+            </div>
+            <span class="ex-brand">LM<strong>express</strong></span>
+        </div>
+        <p class="ex-inst-label">Выберите инстанс</p>
+        <div class="ex-search"><input type="text" id="pvz-search" placeholder="Введите название склада"></div>
+        <div class="ex-tabs">
+            <button class="ex-tab" id="tab-sklady">СКЛАДЫ</button>
+            <button class="ex-tab" id="tab-pvz" data-action="switch-tab">ПУНКТЫ ВЫДАЧИ</button>
+        </div>
+        <div class="ex-pvz-list" id="pvz-list"></div>
+    </div>
+</div>
+
+<!-- ========== S14: SCAN ========== -->
+<div class="scr" id="s14">
+    <div class="ex-page">
+        <div class="ex-scan-top">
+            <div class="exst-l"><span style="font-size:14px;">📋</span> <span id="pvz-display">4.29 Иванова 36А</span></div>
+            <div class="exst-r"><span data-wrong style="color:#3949AB;font-size:12px;">Изменить инстанс</span> <span data-wrong>⊞</span></div>
+        </div>
+        <button class="ex-login-bar" data-wrong>ВВЕСТИ ЛОГИН/ПАРОЛЬ</button>
+        <div class="ex-scan-center">
+            <div class="scan-box">
+                <div class="sc tl"></div><div class="sc tr"></div><div class="sc bl"></div><div class="sc br"></div>
+                <div class="scan-bars-bg"></div>
+                <button class="scan-btn" data-action="start-scan">Начать сканирование</button>
+            </div>
+        </div>
+    </div>
+    <div class="navbar"><span>|||</span><span>○</span><span>◁</span></div>
+</div>
+
+<!-- ========== S14b: SCAN ANIM ========== -->
+<div class="scr" id="s14b">
+    <div class="scan-anim-bg">
+        <div class="sa-inner">
+            <div class="sa-badge">🪪</div>
+            <div class="sa-laser"></div>
+            <p class="sa-text">Сканирование бейджа...</p>
+            <div class="sa-track"><div class="sa-bar" id="scan-bar"></div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== S15: MODE SELECT ========== -->
+<div class="scr" id="s15">
+    <div class="ex-page">
+        <div class="ex-scan-top">
+            <div class="exst-l"><span style="font-size:14px;">📋</span> <span>4.29 Иванова 36А</span></div>
+        </div>
+        <div class="ex-mode-sep"></div>
+        <p class="ex-mode-title">Выберите режим работы</p>
+        <div class="ex-modes">
+            <div class="mode-big" data-wrong style="background:#2962FF;">
+                <svg viewBox="0 0 80 80" width="100" height="100"><g fill="white"><rect x="10" y="40" width="40" height="14" rx="3"/><circle cx="20" cy="58" r="5"/><circle cx="42" cy="58" r="5"/><path d="M40 40l14 10v6H40z"/><path d="M14 30h32l6 10H14z"/></g></svg>
+            </div>
+            <div class="mode-big" data-action="select-pvz-mode" style="background:#212121;">
+                <svg viewBox="0 0 80 80" width="100" height="100"><circle cx="40" cy="22" r="11" fill="#F5DEB3"/><rect x="28" y="33" width="24" height="28" rx="5" fill="#E53935"/><rect x="46" y="38" width="14" height="18" rx="3" fill="#FFD54F"/></svg>
+            </div>
+        </div>
+    </div>
+    <div class="navbar"><span>|||</span><span>○</span><span>◁</span></div>
+</div>
+
+<!-- ========== S16: LOADING CHECKS ========== -->
+<div class="scr" id="s16">
+    <div class="ex-checks">
+        <div class="ck" id="ck1">
+            <div class="ck-circle">
+                <svg width="26" height="26"><circle cx="13" cy="13" r="12" fill="#3949AB"/><path d="M7 13l4 4 8-8" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span>Успешно осуществили вход в систему Express</span>
+        </div>
+        <div class="ck" id="ck2">
+            <div class="ck-circle">
+                <svg width="26" height="26"><circle cx="13" cy="13" r="12" fill="#3949AB"/><path d="M7 13l4 4 8-8" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span>Конфигурация успешно получена</span>
+        </div>
+        <div class="ck" id="ck3">
+            <div class="ck-circle">
+                <svg width="26" height="26"><circle cx="13" cy="13" r="12" fill="#3949AB"/><path d="M7 13l4 4 8-8" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span>Принтер готов к работе</span>
+        </div>
+        <button class="ex-go-main" id="btn-go-main" style="display:none;" data-action="go-main">
+            <span class="gm-arrow">›</span> Перейти на главную
+        </button>
+    </div>
+</div>
+
+<!-- ========== S17: EXPRESS MAIN ========== -->
+<div class="scr" id="s17">
+    <div class="statusbar sb-blue"><span>12:59 ◷</span><span>📶 82% 🔋</span></div>
+    <div class="ex-main-head"><span class="emh-ham">☰</span><span class="emh-brand">LM<strong>express</strong></span></div>
+    <div class="ex-main-body"></div>
+    <div class="navbar nb-blue"><span>|||</span><span>○</span><span>◁</span></div>
+</div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ===== FINISH ===== -->
+<div id="finish-overlay" class="overlay-full hidden">
+    <div class="finish-card">
+        <div class="confetti" id="confetti"></div>
+        <h2>🎉 Поздравляем!</h2>
+        <p class="fin-sub">Смена успешно открыта</p>
+        <div id="fin-time" class="fin-time" style="display:none;">
+            <p>Ваше время:</p>
+            <span id="fin-val" class="fin-big">00:00.0</span>
+            <p id="fin-pen" class="fin-pen"></p>
+        </div>
+        <div class="fin-btns">
+            <button id="btn-tg" class="fb fb-tg"><span>📨</span> Поделиться в Telegram</button>
+            <button id="btn-copy" class="fb fb-copy"><span>🔗</span> Скопировать ссылку</button>
+            <button id="btn-restart" class="fb fb-restart"><span>🔄</span> Начать заново</button>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
